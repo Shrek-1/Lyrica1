@@ -1,216 +1,287 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Lyrica | 3-Layer Gold</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #ffffff;
-  --bg2: #fcfaf5;
-  --accent: #c5a059; 
-  --text1: #1a1a1a;
-  --text2: #757575;
-  --text3: #b5b5b5;
-  --textt: #c5a059;
-  --border: rgba(197, 160, 89, 0.2);
-  --trans: 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Lyrica | 3-Layer Gold</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --bg2: #fcfaf5;
+            --accent: #c5a059; 
+            --accent-rgb: 197, 160, 89;
+            --text1: #1a1a1a;
+            --text2: #757575;
+            --text3: #b5b5b5;
+            --textt: #c5a059;
+            --border: rgba(197, 160, 89, 0.2);
+            --surface: rgba(197, 160, 89, 0.08);
+            --trans: 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-/* CSS FIX: appearance problem for VS Code */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-input, button, select {
-  appearance: none;
-  -webkit-appearance: none;
-}
+        *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        /* VS Code Appearance Fix */
+        input, button, select {
+            appearance: none;
+            -webkit-appearance: none;
+        }
 
-body {
-  font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text1);
-  min-height:100svh; overflow-x:hidden; -webkit-font-smoothing:antialiased;
-}
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text1);
+            min-height: 100svh;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
 
-.ambient{position:fixed;inset:0;pointer-events:none;z-index:0}
-.orb{position:absolute;border-radius:50%;filter:blur(130px);transition:all var(--trans)}
-.orb1{width:65vw;height:65vw;top:-15vw;left:-10vw;background:var(--accent);opacity:0.12}
-.orb2{width:55vw;height:55vw;bottom:-10vw;right:-10vw;background:var(--accent);opacity:0.06}
+        /* Ambient Background */
+        .ambient { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(130px); transition: all var(--trans); }
+        .orb1 { width: 65vw; height: 65vw; top: -15vw; left: -10vw; background: var(--accent); opacity: 0.12; }
+        .orb2 { width: 55vw; height: 55vw; bottom: -10vw; right: -10vw; background: var(--accent); opacity: 0.06; }
 
-.screen{
-  position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:20px;z-index:10;opacity:0;pointer-events:none;transition:opacity .45s ease;
-}
-.screen.active{opacity:1;pointer-events:all}
+        /* Screen Management */
+        .screen {
+            position: fixed; inset: 0; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; padding: 20px;
+            z-index: 10; opacity: 0; pointer-events: none;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: translateY(10px);
+        }
+        .screen.active { opacity: 1; pointer-events: all; transform: translateY(0); }
 
-/* 3-Layer Lyric Styling */
-.lyric-block {
-  padding: 20px 0;
-  opacity: 0.15;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  transform: scale(0.95);
-}
-.lyric-block.active {
-  opacity: 1;
-  transform: scale(1);
-}
-.lyric-orig {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.65rem;
-  color: var(--text1);
-  line-height: 1.2;
-}
-.lyric-tr {
-  font-size: 0.95rem;
-  color: var(--accent);
-  margin-top: 6px;
-  font-weight: 400;
-}
-.lyric-rom {
-  font-size: 0.7rem; /* Tiny layer */
-  color: var(--text3);
-  margin-top: 4px;
-  letter-spacing: 0.05em;
-  text-transform: lowercase;
-  font-style: italic;
-}
+        /* Typography & Setup UI */
+        .wordmark { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 300; color: var(--text1); }
+        .wordmark span { color: var(--accent); }
+        .tagline { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text2); margin-bottom: 40px; }
+        
+        .setup-card { width: 100%; max-width: 400px; text-align: center; z-index: 20; }
+        .inp {
+            width: 100%; background: var(--bg2); border: 1px solid var(--border);
+            border-radius: 12px; padding: 16px; margin-bottom: 12px;
+            color: var(--text1); font-family: inherit; outline: none;
+        }
+        .btn {
+            width: 100%; padding: 16px; background: var(--text1); color: var(--bg);
+            border: none; border-radius: 12px; font-weight: 500; cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn:active { transform: scale(0.98); }
 
-/* ... (Keep all 400 lines of original UI/Setup/Buttons CSS) ... */
+        /* Player Interface */
+        .player-inner { width: 100%; max-width: 600px; height: 100svh; display: flex; flex-direction: column; margin: 0 auto; position: relative; z-index: 20; }
+        .np-strip { margin: 20px; padding: 15px; background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; display: flex; align-items: center; gap: 15px; }
+        .art { width: 50px; height: 50px; border-radius: 10px; background: var(--surface); overflow: hidden; }
+        .art img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .lyrics-scroll {
+            flex: 1; overflow-y: auto; padding: 0 20px;
+            mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+            scrollbar-width: none;
+        }
+        .lyrics-scroll::-webkit-scrollbar { display: none; }
+        .lyrics-container { padding: 35vh 0; }
 
-</style>
+        /* 3-Layer Lyric Blocks */
+        .lyric-block { padding: 22px 0; opacity: 0.15; transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .lyric-block.active { opacity: 1; transform: scale(1.05); }
+        
+        .lyric-orig { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; line-height: 1.2; color: var(--text1); }
+        .lyric-tr { font-size: 0.95rem; color: var(--accent); margin-top: 6px; font-weight: 400; }
+        .lyric-rom { font-size: 0.7rem; color: var(--text3); margin-top: 4px; font-style: italic; letter-spacing: 0.02em; }
+
+        /* Progress Bar */
+        .prog-wrap { margin: 0 25px 15px; }
+        .prog-track { height: 3px; background: var(--border); border-radius: 3px; overflow: hidden; }
+        .prog-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s linear; }
+
+        /* Settings Sheet */
+        .settings-panel { position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .settings-panel.active { opacity: 1; pointer-events: all; }
+        .s-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(5px); }
+        .s-sheet { width: 100%; background: var(--bg); padding: 30px; border-radius: 30px 30px 0 0; position: relative; transform: translateY(100%); transition: 0.4s; }
+        .settings-panel.active .s-sheet { transform: translateY(0); }
+    </style>
 </head>
 <body>
 
-<div class="ambient"><div class="orb orb1"></div><div class="orb orb2"></div></div>
+    <div class="ambient"><div class="orb orb1"></div><div class="orb orb2"></div></div>
 
-<div class="screen" id="player">
-  <div class="player-inner">
-    <div class="lyrics-scroll">
-      <div class="lyrics-container" id="lyricsContainer"></div>
+    <div class="screen active" id="setup">
+        <div class="setup-card">
+            <div class="wordmark">Lyrica<span>.</span></div>
+            <div class="tagline">3-Layer Sync & AI</div>
+            <input class="inp" id="cidInput" placeholder="Spotify Client ID">
+            <input class="inp" id="gimInput" type="password" placeholder="Gemini AI Key">
+            <button class="btn" onclick="startAuth()">Connect Spotify</button>
+        </div>
     </div>
-  </div>
-</div>
 
-<script>
-const S = {
-  clientId: localStorage.getItem('l_cid') || '',
-  gimKey: localStorage.getItem('l_gim') || '',
-  token: null, trackId: null, lines: [],
-  progress: 0, duration: 0, isPlaying: false, lastUpdate: 0, activeIdx: -1
-};
+    <div class="screen" id="player">
+        <div class="player-inner">
+            <div class="np-strip">
+                <div class="art" id="artWrap"></div>
+                <div class="t-info">
+                    <div id="tName" style="font-weight: 500;">—</div>
+                    <div id="tArtist" style="font-size: 0.8rem; color: var(--accent);">—</div>
+                </div>
+                <button onclick="toggleSettings()" style="margin-left:auto; background:none; border:none; font-size: 1.2rem; cursor:pointer;">⚙️</button>
+            </div>
+            <div class="prog-wrap">
+                <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+            </div>
+            <div class="lyrics-scroll">
+                <div class="lyrics-container" id="lyricsContainer"></div>
+            </div>
+        </div>
+    </div>
 
-/* --- 3-LAYER TRANSLATION LOGIC --- */
-async function loadLyrics(title, artist) {
-  const r = await fetch(`https://lrclib.net/api/get?track_name=${encodeURIComponent(title)}&artist_name=${encodeURIComponent(artist)}`);
-  const d = await r.json();
-  
-  if (d.syncedLyrics) {
-    S.lines = d.syncedLyrics.split('\n').map(l => {
-      const m = l.match(/\[(\d+):(\d+\.\d+)\](.*)/);
-      return m ? { 
-        time: (parseInt(m[1])*60 + parseFloat(m[2]))*1000, 
-        text: m[3].trim(), 
-        translation: '', 
-        romanization: '' 
-      } : null;
-    }).filter(x => x);
+    <div class="settings-panel" id="settingsPanel">
+        <div class="s-backdrop" onclick="toggleSettings()"></div>
+        <div class="s-sheet">
+            <h2 style="font-family: 'Cormorant Garamond', serif; margin-bottom: 20px;">Settings</h2>
+            <input class="inp" id="sCid" placeholder="Update Client ID">
+            <input class="inp" id="sGim" type="password" placeholder="Update Gemini Key">
+            <button class="btn" onclick="saveSettings()">Save & Close</button>
+        </div>
+    </div>
 
-    renderLyrics();
-    
-    if (S.gimKey) {
-      await fetchThreeLayerTranslation(S.lines, title, artist);
-    }
-  }
-}
+    <script>
+        const S = {
+            clientId: localStorage.getItem('l_cid') || '',
+            gimKey: localStorage.getItem('l_gim') || '',
+            token: null, trackId: null, lines: [],
+            progress: 0, duration: 0, isPlaying: false, lastUpdate: 0, activeIdx: -1
+        };
 
-async function fetchThreeLayerTranslation(lines, title, artist) {
-  // Batching lyrics for Gemini efficiency
-  const batchSize = 15;
-  for (let i = 0; i < lines.length; i += batchSize) {
-    const batch = lines.slice(i, i + batchSize);
-    const textToProcess = batch.map(l => l.text).join('\n');
+        const REDIRECT = window.location.origin + window.location.pathname;
 
-    try {
-      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${S.gimKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: `You are a music translation expert. I will give you lyrics for "${title}" by "${artist}". 
-              The lyrics might be in the original script (Japanese/Korean/etc) OR already Romanized (English letters but sounds like foreign language).
-              
-              For each line, return exactly three parts separated by " | ":
-              1. The Original Script (If provided in Romanized form, convert it BACK to the native script like Kanji/Hangul).
-              2. The English Translation (The actual meaning).
-              3. The Romanized version (The pronunciation in English letters).
-
-              Rules:
-              - One line per lyric line.
-              - Match the line count (${batch.length}) exactly.
-              
-              Lyrics:
-              ${textToProcess}`
-            }]
-          }]
-        })
-      });
-
-      const d = await r.json();
-      const results = d.candidates[0].content.parts[0].text.trim().split('\n');
-      
-      batch.forEach((line, idx) => {
-        const parts = results[idx] ? results[idx].split('|') : [];
-        if (parts.length >= 3) {
-          line.text = parts[0].trim(); // Restored Native Script
-          line.translation = parts[1].trim(); // Meaning
-          line.romanization = parts[2].trim(); // Pronunciation
+        function startAuth() {
+            const cid = document.getElementById('cidInput').value.trim() || S.clientId;
+            const gim = document.getElementById('gimInput').value.trim() || S.gimKey;
+            if(!cid) return alert("Client ID required");
+            localStorage.setItem('l_cid', cid);
+            localStorage.setItem('l_gim', gim);
+            window.location.href = `https://accounts.spotify.com/authorize?client_id=${cid}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT)}&scope=user-read-currently-playing`;
         }
-      });
-      
-      renderLyrics(); // Update UI as batches complete
-    } catch (e) {
-      console.error("Gemini 3-Layer Error:", e);
-    }
-  }
-}
 
-function renderLyrics() {
-  document.getElementById('lyricsContainer').innerHTML = S.lines.map(l => `
-    <div class="lyric-block">
-      <div class="lyric-orig">${l.text}</div>
-      <div class="lyric-tr">${l.translation || '...'}</div>
-      <div class="lyric-rom">${l.romanization || ''}</div>
-    </div>`).join('');
-}
+        async function init() {
+            const hash = window.location.hash.substring(1);
+            const params = new URLSearchParams(hash);
+            const tok = params.get('access_token') || localStorage.getItem('l_tok');
 
-/* --- ANTI-FREEZE SYNC LOOP --- */
-function smoothSyncLoop() {
-  if (S.isPlaying && S.lines.length > 0) {
-    const now = Date.now();
-    const drift = now - S.lastUpdate;
-    const currentPos = S.progress + drift;
-    
-    document.getElementById('progFill').style.width = Math.min((currentPos / S.duration) * 100, 100) + '%';
-    
-    let active = 0;
-    for (let i = 0; i < S.lines.length; i++) {
-      if (S.lines[i].time <= currentPos) active = i;
-    }
+            if (tok) {
+                S.token = tok;
+                localStorage.setItem('l_tok', tok);
+                window.location.hash = "";
+                document.getElementById('setup').classList.remove('active');
+                document.getElementById('player').classList.add('active');
+                poll();
+                requestAnimationFrame(smoothSyncLoop);
+            }
+        }
 
-    if (active !== S.activeIdx) {
-      S.activeIdx = active;
-      const blocks = document.querySelectorAll('.lyric-block');
-      blocks.forEach((el, i) => {
-        el.classList.toggle('active', i === active);
-        if (i === active) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      });
-    }
-  }
-  requestAnimationFrame(smoothSyncLoop);
-}
+        async function poll() {
+            if (!S.token) return;
+            try {
+                const r = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+                    headers: { 'Authorization': `Bearer ${S.token}` }
+                });
+                if (r.status === 200) {
+                    const d = await r.json();
+                    S.progress = d.progress_ms;
+                    S.duration = d.item.duration_ms;
+                    S.isPlaying = d.is_playing;
+                    S.lastUpdate = Date.now();
+                    
+                    if (d.item.id !== S.trackId) {
+                        S.trackId = d.item.id;
+                        document.getElementById('tName').textContent = d.item.name;
+                        document.getElementById('tArtist').textContent = d.item.artists[0].name;
+                        document.getElementById('artWrap').innerHTML = `<img src="${d.item.album.images[0].url}">`;
+                        fetchLyrics(d.item.name, d.item.artists[0].name);
+                    }
+                }
+            } catch (e) { console.error(e); }
+            setTimeout(poll, 2000);
+        }
 
-// ... (Remaining 500+ lines of Auth, Polling, Settings management) ...
+        async function fetchLyrics(title, artist) {
+            const r = await fetch(`https://lrclib.net/api/get?track_name=${encodeURIComponent(title)}&artist_name=${encodeURIComponent(artist)}`);
+            const d = await r.json();
+            if (d.syncedLyrics) {
+                S.lines = d.syncedLyrics.split('\n').map(l => {
+                    const m = l.match(/\[(\d+):(\d+\.\d+)\](.*)/);
+                    return m ? { time: (parseInt(m[1])*60 + parseFloat(m[2]))*1000, text: m[3].trim(), translation: '', romanization: '' } : null;
+                }).filter(x => x);
+                render();
+                if (S.gimKey) translateBatch(S.lines, title, artist);
+            }
+        }
 
-init();
-</script>
+        async function translateBatch(lines, title, artist) {
+            const text = lines.map(l => l.text).join('\n');
+            try {
+                const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${S.gimKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Song: ${title} by ${artist}. For each line return "Native Script | Meaning | Pronunciation". Match line count (${lines.length}):\n${text}` }] }]
+                    })
+                });
+                const d = await r.json();
+                const results = d.candidates[0].content.parts[0].text.trim().split('\n');
+                lines.forEach((l, i) => {
+                    const p = results[i]?.split('|') || [];
+                    if (p.length >= 2) { l.text = p[0].trim(); l.translation = p[1].trim(); l.romanization = p[2]?.trim() || ''; }
+                });
+                render();
+            } catch (e) { console.error(e); }
+        }
+
+        function render() {
+            document.getElementById('lyricsContainer').innerHTML = S.lines.map(l => `
+                <div class="lyric-block">
+                    <div class="lyric-orig">${l.text}</div>
+                    <div class="lyric-tr">${l.translation}</div>
+                    <div class="lyric-rom">${l.romanization}</div>
+                </div>`).join('');
+        }
+
+        function smoothSyncLoop() {
+            if (S.isPlaying && S.lines.length) {
+                const now = Date.now();
+                const cur = S.progress + (now - S.lastUpdate);
+                document.getElementById('progFill').style.width = (cur / S.duration * 100) + '%';
+                
+                let active = 0;
+                for (let i = 0; i < S.lines.length; i++) { if (S.lines[i].time <= cur) active = i; }
+                
+                if (active !== S.activeIdx) {
+                    S.activeIdx = active;
+                    const blocks = document.querySelectorAll('.lyric-block');
+                    blocks.forEach((b, i) => {
+                        b.classList.toggle('active', i === active);
+                        if (i === active) b.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    });
+                }
+            }
+            requestAnimationFrame(smoothSyncLoop);
+        }
+
+        function toggleSettings() { document.getElementById('settingsPanel').classList.toggle('active'); }
+        function saveSettings() {
+            S.clientId = document.getElementById('sCid').value;
+            S.gimKey = document.getElementById('sGim').value;
+            localStorage.setItem('l_cid', S.clientId);
+            localStorage.setItem('l_gim', S.gimKey);
+            toggleSettings();
+        }
+
+        init();
+    </script>
 </body>
 </html>
